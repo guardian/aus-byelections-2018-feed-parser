@@ -18,12 +18,13 @@ import time
 # 2016 id = '20499'
 # 2016 address = mediafeed.aec.gov.au
 
-
 verbose = True
-electionIDs = ['21751','21364']
+electionIDs = ['22692','22693','22694','22695','22696']
+testIDs = ['21364','21379']
 
-testTime = datetime.strptime("2013-09-07 18:00","%Y-%m-%d %H:%M")
-path = '/{electionID}/Standard/Verbose/'.format(electionID=electionID)
+testTime = datetime.strptime("2017-12-16 17:00","%Y-%m-%d %H:%M")
+
+# path = '/{electionID}/Standard/Verbose/'.format(electionID=electionID)
 
 print "Logging in to AEC FTP"
 
@@ -33,9 +34,12 @@ ftpUrl = 'mediafeedarchive.aec.gov.au'
 ftp = FTP(ftpUrl)
 ftp.login()
 
+def parse_results(test,idList):
 
-def parse_results(test):
-	for electionID in electionIDs:
+	new_data = {}
+
+	for electionID in idList:
+		
 		print("Election: " + electionID)
 
 		ftp.cwd('/{electionID}/Standard/Verbose/'.format(electionID=electionID))
@@ -66,6 +70,8 @@ def parse_results(test):
 			timestamp = f.split("-")[-1].replace(".zip","")
 
 			if test:
+				print datetime.strptime(timestamp,"%Y%m%d%H%M%S")
+				print testTime
 				if datetime.strptime(timestamp,"%Y%m%d%H%M%S") < testTime:
 					print "test time is ", testTime
 					if verbose:
@@ -77,6 +83,7 @@ def parse_results(test):
 
 				timestamps.append(datetime.strptime(timestamp,"%Y%m%d%H%M%S"))
 
+		print timestamps		
 		latestTimestamp = max(timestamps)
 		latestTimestampStr = datetime.strftime(latestTimestamp, '%Y%m%d%H%M%S')
 
@@ -95,7 +102,7 @@ def parse_results(test):
 
 			# Check if we have it or not
 
-			if latestTimestampStr not in recentResults:
+			if latestTimestampStr not in recentResults[electionID]:
 				
 				print "{timestamp} hasn't been saved, saving now".format(timestamp=latestTimestampStr)
 				
@@ -117,10 +124,10 @@ def parse_results(test):
 
 				print "Parsing the feed into JSON"
 
-				emlparse.eml_to_JSON(content,'media feed',False,latestTimestampStr)
-				logresults.saveRecentResults(latestTimestampStr)
+				emlparse.eml_to_JSON(electionID,content,'media feed',False,latestTimestampStr)
+				logresults.saveRecentResults(electionID,idList,latestTimestampStr)
 
-			if latestTimestampStr in recentResults:
+			if latestTimestampStr in recentResults[electionID]:
 				print "{timestamp} has already been saved".format(timestamp=latestTimestampStr)
 
 		# It doesn't exist, so treat timestamp as first
@@ -146,36 +153,38 @@ def parse_results(test):
 
 			print "Parsing the feed into JSON"
 
-			emlparse.eml_to_JSON(content,'media feed',False,latestTimestampStr)
-			logresults.saveRecentResults(latestTimestampStr)
+			emlparse.eml_to_JSON(electionID,content,'media feed',False,latestTimestampStr)
+			logresults.saveRecentResults(electionID,idList,latestTimestampStr)
 
 		print "Done, results all saved"
 
 # Use scheduler to time function every 2 minutes
 
-parse_results(False)
-schedule.every(2).minutes.do(parse_results,False)
+# parse_results(False,electionIDs)
+# schedule.every(2).minutes.do(parse_results,False,electionIDs)
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-    print datetime.now()
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
+#     print datetime.now()
 
 # Test function, counts from 6 pm to 11 pm on election night 2013    
 
-# def runTest():
-# 	global testTime
-# 	endTime = datetime.strptime("2013-09-07 23:00","%Y-%m-%d %H:%M")
-# 	schedule.every(2).minutes.do(parse_results,True)
+def runTest():
+	global testTime
+	# testTime = datetime.strptime("2016-12-16 17:00","%Y-%m-%d %H:%M")
+	endTime = datetime.strptime("2017-12-16 19:00","%Y-%m-%d %H:%M")
+	parse_results(True,testIDs)
+	schedule.every(2).minutes.do(parse_results,True,testIDs)
 	
-# 	while testTime < endTime:
-# 		schedule.run_pending()
-# 		testTime = testTime + timedelta(seconds=1)
-# 		print testTime
-# 		time.sleep(1)
+	while testTime < endTime:
+		schedule.run_pending()
+		testTime = testTime + timedelta(seconds=1)
+		print testTime
+		time.sleep(1)
 
 
-# runTest()
+runTest()
 
 # parse_results(True)
 # ftp.quit()
