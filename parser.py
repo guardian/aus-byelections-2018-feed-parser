@@ -160,31 +160,31 @@ def parse_results(test,idList):
 
 # Use scheduler to time function every 2 minutes
 
-# parse_results(False,electionIDs)
-# schedule.every(2).minutes.do(parse_results,False,electionIDs)
+parse_results(False,electionIDs)
+schedule.every(2).minutes.do(parse_results,False,electionIDs)
 
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
-#     print datetime.now()
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+    print datetime.now()
 
 # Test function, counts from 6 pm to 11 pm on election night 2013    
 
-def runTest():
-	global testTime
-	# testTime = datetime.strptime("2016-12-16 17:00","%Y-%m-%d %H:%M")
-	endTime = datetime.strptime("2017-12-16 19:00","%Y-%m-%d %H:%M")
-	parse_results(True,testIDs)
-	schedule.every(2).minutes.do(parse_results,True,testIDs)
+# def runTest():
+# 	global testTime
+# 	# testTime = datetime.strptime("2016-12-16 17:00","%Y-%m-%d %H:%M")
+# 	endTime = datetime.strptime("2017-12-16 19:00","%Y-%m-%d %H:%M")
+# 	parse_results(True,testIDs)
+# 	schedule.every(2).minutes.do(parse_results,True,testIDs)
 	
-	while testTime < endTime:
-		schedule.run_pending()
-		testTime = testTime + timedelta(seconds=1)
-		print testTime
-		time.sleep(1)
+# 	while testTime < endTime:
+# 		schedule.run_pending()
+# 		testTime = testTime + timedelta(seconds=1)
+# 		print testTime
+# 		time.sleep(1)
 
 
-runTest()
+# runTest()
 
 # parse_results(True)
 # ftp.quit()
