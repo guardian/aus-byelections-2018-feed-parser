@@ -28,8 +28,8 @@ testTime = datetime.strptime("2017-12-16 17:00","%Y-%m-%d %H:%M")
 
 print "Logging in to AEC FTP"
 
-# ftpUrl = 'mediafeed.aec.gov.au'
-ftpUrl = 'mediafeedarchive.aec.gov.au'
+ftpUrl = 'mediafeed.aec.gov.au'
+# ftpUrl = 'mediafeedarchive.aec.gov.au'
 
 ftp = FTP(ftpUrl)
 ftp.login()
