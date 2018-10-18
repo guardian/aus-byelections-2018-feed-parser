@@ -1,2 +1,4 @@
 test-files/
 *.pyc
+recentResults.json
+.DS_Store

@@ -19,7 +19,7 @@ import time
 # 2016 address = mediafeed.aec.gov.au
 
 verbose = True
-electionIDs = ['22692','22693','22694','22695','22696']
+electionIDs = ['22844']
 testIDs = ['21364','21379']
 
 testTime = datetime.strptime("2017-12-16 17:00","%Y-%m-%d %H:%M")
@@ -168,24 +168,5 @@ while True:
     time.sleep(1)
     print datetime.now()
 
-# Test function, counts from 6 pm to 11 pm on election night 2013    
 
-# def runTest():
-# 	global testTime
-# 	# testTime = datetime.strptime("2016-12-16 17:00","%Y-%m-%d %H:%M")
-# 	endTime = datetime.strptime("2017-12-16 19:00","%Y-%m-%d %H:%M")
-# 	parse_results(True,testIDs)
-# 	schedule.every(2).minutes.do(parse_results,True,testIDs)
-	
-# 	while testTime < endTime:
-# 		schedule.run_pending()
-# 		testTime = testTime + timedelta(seconds=1)
-# 		print testTime
-# 		time.sleep(1)
-
-
-# runTest()
-
-# parse_results(True)
-# ftp.quit()
 
