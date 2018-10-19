@@ -135,7 +135,7 @@ def eml_to_JSON(electionID,eml_file, type, local,timestamp):
 		from boto.s3.key import Key
 
 		k = Key(bucket)
-		k.key = "2018/07/aus-byelections/{electionID}-{timestamp}.json".format(electionID=electionID,timestamp=timestamp)
+		k.key = "2018/10/aus-byelections/{electionID}-{timestamp}.json".format(electionID=electionID,timestamp=timestamp)
 		k.set_metadata("Cache-Control", "max-age=90")
 		k.set_metadata("Content-Type", "application/json")
 		k.set_contents_from_string(newJson)
